@@ -1,0 +1,45 @@
+# ----- Native shell (Tauri / Rust) — not public -----
+src-tauri/
+
+# ----- Build pipeline scripts -----
+scripts/
+python/build.py
+
+# ----- Internal documents -----
+spec.md
+CLAUDE.md
+.claude/
+
+# ----- Frontend build artifacts -----
+dist/
+node_modules/
+*.tsbuildinfo
+.vite/
+
+# ----- Python environment & build artifacts -----
+python/.venv/
+python/dist/
+python/build/
+python/.pytest_cache/
+python/.mypy_cache/
+python/.ruff_cache/
+python/.coverage
+python/htmlcov/
+__pycache__/
+*.pyc
+*.pyo
+
+# ----- Script output -----
+python_scripts/output/
+
+# ----- Secrets & local overrides -----
+.env
+.env.local
+*.local
+
+# ----- Temp -----
+temp/
+
+# ----- OS -----
+.DS_Store
+Thumbs.db
