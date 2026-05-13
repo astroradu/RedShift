@@ -1,3 +1,9 @@
+## v1.0.2 — macOS Gatekeeper fix
+
+Fixes a crash on macOS where the app wouldn't open after install.
+
+---
+
 ## v1.0.1 — First public release
 
 RedShift is a desktop toolkit for planning astrophotography sessions. This is its first public release. Everything you see is new.
@@ -16,7 +22,6 @@ The app ships as a single native executable for macOS — no installer steps, no
 - Watch calculation progress live through a five-step status display as the engine works.
 - See the top result in a hero card that always surfaces your single best target, plus a separate "best rising target" card when the leaderboard is dominated by a circumpolar object.
 - Browse every constellation in a colour-coded heatmap table — one column per month, sorted by any column you like.
-- Switch between Heatmap, Numbers, and Sparkline views to read the results in whichever form is clearest to you.
 - Jump straight back to your last results at any time during the session without re-running the calculation.
 
 **Imaging Planner — Galaxy Planner**
@@ -31,7 +36,6 @@ The app ships as a single native executable for macOS — no installer steps, no
 **Location**
 
 - Set your observing latitude and longitude once in Settings, and every planner calculation picks it up automatically.
-- On macOS, fetch your coarse system location in one tap — no typing required.
 - Enter coordinates manually in decimal degrees, with range validation on both fields.
 - Your active location is shown in the header strip of every planner start screen so you always know what coordinates will be used.
 
