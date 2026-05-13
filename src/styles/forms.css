@@ -1,0 +1,265 @@
+/* ─── Buttons ────────────────────────────────────────────────── */
+.btn {
+  appearance: none;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 180ms ease;
+}
+.btn:hover { border-color: var(--text); }
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #051018;
+  font-weight: 600;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent), 0 8px 24px -8px var(--accent);
+}
+:root[data-mode="light"] .btn.primary { color: #fff; }
+.btn.primary:hover { box-shadow: 0 0 0 1px var(--accent), 0 10px 30px -8px var(--accent); transform: translateY(-1px); }
+.btn.ghost { background: transparent; }
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* ─── kbd ────────────────────────────────────────────────────── */
+.kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 4px;
+  font-size: 10px; color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+/* ─── Slider (Image Stacker right-panel sliders) ─────────────── */
+.slider-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 44px;
+  gap: 12px; align-items: center;
+  padding: 6px 0;
+  font-size: 11px;
+}
+.slider-row .lbl { color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-size: 10px; }
+.slider-row .val { font-family: 'Inter Tight', sans-serif; font-size: 11px; color: var(--text); text-align: right; letter-spacing: 0.02em; }
+.slider-track {
+  position: relative; height: 3px; border-radius: 999px;
+  background: var(--hairline-strong);
+}
+.slider-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 999px;
+}
+.slider-knob {
+  position: absolute;
+  top: 50%; transform: translate(-50%, -50%);
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 12px var(--accent);
+}
+
+/* ─── Period selector (planner timeframe) ────────────────────── */
+.period-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+  padding: 6px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.period-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 200ms ease;
+  white-space: nowrap;
+}
+.period-btn:hover { color: var(--text); }
+.period-btn.on {
+  color: #051018;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, var(--accent-2)));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent), 0 8px 24px -10px var(--accent);
+  font-weight: 600;
+}
+:root[data-mode="light"] .period-btn.on { color: #fff; }
+
+/* ─── Complexity slider (planner timeframe step) ─────────────── */
+.complexity-block {
+  margin-top: 22px;
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cb-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.cb-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cb-value {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.cb-track {
+  position: relative;
+  height: 6px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+}
+.cb-fill {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, var(--accent-2)));
+  border-radius: 999px;
+  transition: width 180ms ease;
+}
+.cb-dot {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-2);
+  cursor: pointer;
+  padding: 0;
+  appearance: none;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+.cb-dot.filled {
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+.cb-dot.on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.cb-dot:hover { transform: scale(1.15); }
+.cb-knob {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  margin-top: -8px;
+  border-radius: 50%;
+  background: var(--text);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent),
+    0 6px 18px -6px var(--accent);
+  pointer-events: none;
+  transition: left 180ms ease;
+}
+.cb-ticks {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.cb-ticks span { text-align: center; transition: color 180ms ease; }
+.cb-ticks span:first-child { text-align: left; }
+.cb-ticks span:last-child { text-align: right; }
+.cb-ticks span.on { color: var(--text); }
+.cb-ticks-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* ─── Galaxy compute toggle ──────────────────────────────────── */
+.galaxy-toggle-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  margin: 12px 0 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface-2) 30%, transparent);
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+  width: 100%;
+  max-width: 520px;
+}
+.galaxy-toggle-row:hover {
+  border-color: var(--hairline-strong);
+}
+.galaxy-toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.galaxy-toggle-box {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  color: var(--bg);
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.galaxy-toggle-input:checked + .galaxy-toggle-box {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+.galaxy-toggle-input:focus-visible + .galaxy-toggle-box {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.galaxy-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  text-align: left;
+}
+.gt-title {
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.gt-sub {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}

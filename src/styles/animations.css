@@ -1,0 +1,39 @@
+/* ─── Animations & transitions ────────────────────────────────── */
+
+/* page transitions */
+.fade-enter { opacity: 0; transform: translateY(6px); }
+.fade-in { animation: fadeIn 280ms ease forwards; }
+@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+@keyframes pulse { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
+@keyframes ts-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+@keyframes boot-spin { to { transform: rotate(360deg); } }
+
+@keyframes ntf-glyph-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; }
+}
+
+@keyframes gd-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,116 @@
+/* ─── Home ───────────────────────────────────────────────────── */
+.home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 96px 32px 60px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.home-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.home-eyebrow::before, .home-eyebrow::after {
+  content: ''; width: 28px; height: 1px;
+  background: var(--hairline-strong);
+}
+
+.home-wordmark {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 700;
+  font-size: 88px;
+  letter-spacing: -0.035em;
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  color: var(--text);
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+}
+.hw-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 32px rgba(235, 67, 67, 0.45));
+}
+.hw-text {
+  display: inline-flex;
+}
+.hw-red { color: #B40719; }
+.hw-shift { color: #EB4343; }
+
+.home-wordmark-group {
+  display: inline-flex;
+  flex-direction: column;
+}
+.home-byline {
+  margin-top: 4px;
+  text-align: right;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.home-tagline {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-align: center;
+  max-width: 540px;
+  line-height: 1.6;
+  font-style: italic;
+}
+.home-tagline-attr {
+  display: block;
+  margin-top: 6px;
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.home-coords {
+  margin-top: 28px;
+  display: flex; gap: 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.home-coords span b {
+  color: var(--text);
+  font-weight: 500;
+  margin-right: 6px;
+  letter-spacing: 0.12em;
+}
+
+.feature-grid {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 340px));
+  gap: 14px;
+  max-width: 720px;
+  width: 100%;
+}
+.feature-grid > .card:nth-child(5),
+.feature-grid > .card:only-child {
+  grid-column: 1 / -1;
+  max-width: 100%;
+}

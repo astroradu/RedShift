@@ -1,0 +1,23 @@
+/*
+ * RedShift — deep-space luxury minimalism.
+ *
+ * Component-scoped partials live in `src/styles/`. Import order matters:
+ * globals (tokens, resets, animations) come first, then layout and component
+ * scopes in roughly the order rules originally appeared in this file so the
+ * cascade is preserved.
+ */
+@import './styles/base.css';
+@import './styles/backgrounds.css';
+@import './styles/animations.css';
+@import './styles/layout.css';
+@import './styles/home.css';
+@import './styles/cards.css';
+@import './styles/forms.css';
+@import './styles/tables.css';
+@import './styles/planner.css';
+@import './styles/settings.css';
+@import './styles/boot.css';
+@import './styles/popups.css';
+@import './styles/toasts.css';
+@import './styles/pagination.css';
+@import './styles/docs.css';

@@ -1,0 +1,37 @@
+{
+  "name": "redshift",
+  "version": "1.0.1",
+  "description": "A desktop toolkit for planning astrophotography sessions.",
+  "author": "Radu Marinescu <radu.marinescu.996@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/astroradu/RedShift.git"
+  },
+  "homepage": "https://github.com/astroradu/RedShift",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:build:macos": "tauri build && bash scripts/codesign-macos-app.sh"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.0",
+    "@types/node": "^25.6.0",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.2",
+    "vite": "^6.0.0"
+  }
+}

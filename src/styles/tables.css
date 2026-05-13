@@ -1,0 +1,177 @@
+/* ─── Data tables (planner results) ──────────────────────────── */
+.table-wrap {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--surface);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.table-toolbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--hairline);
+}
+.table-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.data-table {
+  display: flex; flex-direction: column;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+}
+.dt-row {
+  display: grid;
+  grid-template-columns: 160px repeat(12, 1fr) 110px 90px;
+  align-items: stretch;
+  border-bottom: 1px solid var(--hairline);
+}
+.dt-row:last-child { border-bottom: 0; }
+.dt-row:not(.dt-head):hover { background: var(--surface-2); }
+.dt-row.dt-head {
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.dt-cell {
+  padding: 12px 10px;
+  display: flex; align-items: center;
+  border-right: 1px solid var(--hairline);
+}
+.dt-cell:last-child { border-right: 0; }
+.dt-cell.name {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: 0.01em;
+  gap: 10px;
+  padding-left: 18px;
+}
+.dt-row.dt-head .dt-cell.name { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 10px; color: var(--muted); }
+.dt-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+.dt-cell.month {
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  font-size: 12px;
+  position: relative;
+}
+.dt-cell.month.heat { transition: background 200ms ease; }
+.dt-cell.month.peak {
+  color: var(--text);
+  font-weight: 600;
+  position: relative;
+}
+.dt-cell.month.peak::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid color-mix(in srgb, var(--accent-2) 70%, transparent);
+  border-radius: 4px;
+  pointer-events: none;
+}
+.dt-cell.best { justify-content: center; }
+.best-pill {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-2) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
+  color: color-mix(in srgb, var(--accent-2) 70%, var(--text));
+  font-family: 'DM Sans', sans-serif;
+}
+.dt-cell.total {
+  justify-content: flex-end;
+  padding-right: 18px;
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums;
+  gap: 3px;
+}
+.dt-row.dt-head .dt-cell.total { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 10px; color: var(--muted); }
+.dt-cell.total .unit { color: var(--muted); font-size: 10px; font-weight: 400; margin-left: 2px; }
+
+@media (max-width: 1100px) {
+  .dt-row { grid-template-columns: 140px repeat(12, minmax(38px, 1fr)) 100px 80px; }
+}
+
+/* ─── Galaxy table overrides ─────────────────────────────────── */
+.galaxy-count-pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--surface-2);
+}
+/* Horizontal-only scroll wrapper — keeps vertical scroll on results-body. */
+.galaxy-table-hscroll {
+  overflow-x: auto;
+}
+/*
+ * Force the data-table to grow to its full content width (sum of grid
+ * columns) so row backgrounds and bottom borders extend across the entire
+ * scrollable area. Without this the row box is clipped to the visible
+ * viewport and rows past the initial scroll position render without
+ * separators or header background.
+ */
+.galaxy-table-hscroll .data-table {
+  min-width: max-content;
+}
+/* Override grid columns via CSS custom property set per render. */
+.galaxy-results .data-table .dt-row {
+  grid-template-columns: var(--gx-cols);
+}
+/* Metadata columns: muted. Header inherits muted from dt-head. */
+.dt-cell.meta {
+  color: var(--muted);
+  font-size: 11px;
+}
+/*
+ * `alt_names` values are huge comma-separated strings that wrap and balloon
+ * the row height. Force one-line + ellipsis just on this column.
+ * `display: block` is required because `text-overflow: ellipsis` does not
+ * apply to flex containers (the default for `.dt-cell`).
+ */
+.dt-cell.meta[data-col="alt_names"] {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Approximate the vertical centring lost by switching off flex. */
+  padding-top: 14px;
+}
+/* Clickable galaxy rows with an active highlight. */
+.galaxy-dt-row { cursor: pointer; }
+.galaxy-dt-row.active {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.galaxy-dt-row:focus { outline: none; }
+.galaxy-dt-row:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+/* Sticky pagination strip below the scroll area. */
+.galaxy-pagination-bar {
+  flex-shrink: 0;
+  padding: 0 28px 16px;
+}

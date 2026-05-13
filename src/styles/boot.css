@@ -1,0 +1,23 @@
+/* ─── Boot splash ────────────────────────────────────────────── */
+.boot-splash {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 18px;
+  background: var(--bg); color: var(--ink-soft);
+  font-family: var(--font-display, ui-sans-serif, system-ui);
+  letter-spacing: 0.18em; text-transform: uppercase; font-size: 11px;
+}
+.boot-splash-mark {
+  width: 64px; height: 64px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--panel), var(--bg));
+  box-shadow: 0 0 0 1px var(--hairline), 0 24px 60px -30px var(--glow);
+}
+.boot-splash-mark::after {
+  content: ""; width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--hairline-strong); border-top-color: var(--accent);
+  animation: boot-spin 1.1s linear infinite;
+}
+.boot-splash-line { opacity: 0.78; }
+.boot-splash[data-state="error"] .boot-splash-line { color: var(--accent); }
