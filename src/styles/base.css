@@ -1,0 +1,45 @@
+/* RedShift — design tokens, resets, typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* Default vars (Aurora dark) — overridden inline by JS via <style id="palette-vars"> */
+:root {
+  --bg: #080B12;
+  --surface: #0F1520;
+  --surface-2: #131A28;
+  --accent: #4DBBFF;
+  --accent-2: #B06AFF;
+  --text: #E8EEFF;
+  --muted: #5A6785;
+  --hairline: rgba(232, 238, 255, 0.08);
+  --hairline-strong: rgba(232, 238, 255, 0.14);
+  --glow: rgba(77, 187, 255, 0.18);
+  --glow-violet: rgba(176, 106, 255, 0.18);
+  --inset: rgba(255, 255, 255, 0.02);
+  --noise-opacity: 0.035;
+  --star-opacity: 0.55;
+  --grid-line: rgba(232, 238, 255, 0.04);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 250ms ease, color 250ms ease;
+  overflow: hidden;
+}
+
+#root { height: 100vh; width: 100vw; position: relative; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--hairline-strong); border-radius: 999px; }
+::-webkit-scrollbar-track { background: transparent; }
+

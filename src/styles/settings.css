@@ -1,0 +1,142 @@
+/* ─── Settings ────────────────────────────────── */
+.settings-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.settings-head {
+  padding: 22px 32px 18px;
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.settings-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.settings-sub {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.settings-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 32px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 1280px;
+  width: 100%;
+  align-self: center;
+}
+
+.settings-section {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--hairline);
+}
+.settings-section:last-child { border-bottom: 0; padding-bottom: 0; }
+.ss-eyebrow {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.ss-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+}
+.ss-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+  max-width: 240px;
+}
+
+@media (max-width: 900px) {
+  .settings-section { grid-template-columns: 1fr; gap: 20px; }
+}
+
+/* ─── Settings · Location ─────────────────────────────────── */
+.loc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 520px;
+}
+.loc-system {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.loc-source {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.loc-fields {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.loc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 140px;
+  min-width: 140px;
+}
+.loc-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.loc-field input {
+  appearance: none;
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+.loc-field input:hover { border-color: var(--hairline-strong); }
+.loc-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+.loc-save {
+  flex: 0 0 auto;
+  height: 38px;
+}
+.loc-save.saved {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: none;
+  cursor: default;
+}
