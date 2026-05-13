@@ -1,6 +1,6 @@
 [project]
 name = "redshift-backend"
-version = "1.0.1"
+version = "1.0.2"
 description = "RedShift FastAPI sidecar"
 requires-python = ">=3.12,<3.13"
 dependencies = [

@@ -6,7 +6,7 @@
 
 Plan your astrophotography sessions with precision — score every constellation and thousands of PGC galaxies by visibility, right from your observing site.
 
-[![Version](https://img.shields.io/badge/version-1.0.1-blue?style=flat-square)](https://github.com/astroradu/RedShift/releases)
+[![Version](https://img.shields.io/badge/version-1.0.2-blue?style=flat-square)](https://github.com/astroradu/RedShift/releases)
 [![License](https://img.shields.io/badge/license-Source_Available-orange?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey?style=flat-square)](#download)
 
@@ -52,6 +52,20 @@ RedShift is a desktop toolkit for **planning astrophotography sessions**. It tak
 RedShift is a **Tauri 2** native desktop app with a **React 18 + TypeScript** frontend and a bundled **Python 3.12 + FastAPI** sidecar. The Rust shell owns the native window and spawns the sidecar. All application logic runs in the Python backend over authenticated HTTP on loopback — which means real computation scripts can plug in by replacing service implementations without touching the frontend.
 
 No third-party UI kit is used. Every component is hand-rolled with a custom CSS variable design system.
+
+---
+
+## Installation (macOS)
+
+RedShift is signed but not yet notarized with Apple, so the first time you open it macOS will warn that *"Apple could not verify RedShift is free of malware"*. To allow it:
+
+1. Open the downloaded DMG and drag **RedShift** into your **Applications** folder.
+2. Try to open RedShift once — macOS will block it. Dismiss the dialog.
+3. Go to **System Settings → Privacy & Security**.
+4. Scroll down to the **Security** section. You'll see *"RedShift was blocked to protect your Mac"* — click **Open Anyway** next to it.
+5. Confirm with Touch ID or your password, then click **Open** in the final prompt.
+
+You only need to do this once. After that, RedShift launches normally from Applications or Spotlight.
 
 ---
 
