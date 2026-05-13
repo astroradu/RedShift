@@ -1,4 +1,4 @@
-
+<div align="center">
 
 # RedShift
 
@@ -6,15 +6,17 @@
 
 Plan your astrophotography sessions with precision — score every constellation and thousands of PGC galaxies by visibility, right from your observing site.
 
-[Version](https://github.com/astroradu/RedShift/releases)
-[License](LICENSE)
-[Platform](#download)
+[![Version](https://img.shields.io/badge/version-1.0.1-blue?style=flat-square)](https://github.com/astroradu/RedShift/releases)
+[![License](https://img.shields.io/badge/license-Source_Available-orange?style=flat-square)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-macOS-lightgrey?style=flat-square)](#download)
 
-
+</div>
 
 ---
 
-
+<p align="center">
+  <img src="docs/screenshots/overview.png" alt="RedShift — astrophotography planning toolkit" width="860" />
+</p>
 
 ---
 
@@ -28,29 +30,26 @@ RedShift is a desktop toolkit for **planning astrophotography sessions**. It tak
 
 ## Tech Stack
 
+<div align="center">
 
+![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite_6-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS_Custom-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
-React
-TypeScript
-Vite
-CSS3
+![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic_v2-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
+![astropy](https://img.shields.io/badge/astropy-FF7F0E?style=for-the-badge&logo=python&logoColor=white)
 
-Python
-FastAPI
-Pydantic
-astropy
+![Tauri](https://img.shields.io/badge/Tauri_2-24C8DB?style=for-the-badge&logo=tauri&logoColor=white)
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
 
-Tauri
-Rust
+</div>
 
+<br/>
 
-
-  
-
-
-RedShift is a **Tauri 2** native desktop app with a **React 18 + TypeScript** frontend and a bundled **Python 3.12 + FastAPI** sidecar. The Rust shell owns the native window and spawns the sidecar. 
-
-All application logic runs in the Python backend over authenticated HTTP on loopback — which means real computation scripts can plug in by replacing service implementations without touching the frontend.
+RedShift is a **Tauri 2** native desktop app with a **React 18 + TypeScript** frontend and a bundled **Python 3.12 + FastAPI** sidecar. The Rust shell owns the native window and spawns the sidecar. All application logic runs in the Python backend over authenticated HTTP on loopback — which means real computation scripts can plug in by replacing service implementations without touching the frontend.
 
 No third-party UI kit is used. Every component is hand-rolled with a custom CSS variable design system.
 
@@ -58,12 +57,10 @@ No third-party UI kit is used. Every component is hand-rolled with a custom CSS 
 
 ## Modules
 
-
-| Module                   | Feature                   | Description                                                                                                                                             |
-| ------------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **01 - Imaging Planner** | **Constellation Planner** | Plan your shoots by checking which constellations stick around longest and sit highest in the sky. Backed by real `astropy` / `astroplan` computation.  |
-| **01 - Imaging Planner** | **Galaxy Planner**        | Scout your best shooting spots by finding galaxies that hang around all night and stay near zenith. Backed by real `astropy` / `astroplan` computation. |
-
+| Module | Feature | Description |
+|--------|---------|-------------|
+| **01 - Imaging Planner** | **Constellation Planner** | Plan your shoots by checking which constellations stick around longest and sit highest in the sky. Backed by real `astropy` / `astroplan` computation. |
+| **01 - Imaging Planner** | **Galaxy Planner** | Scout your best shooting spots by finding galaxies that hang around all night and stay near zenith. Backed by real `astropy` / `astroplan` computation. |
 
 ---
 
@@ -79,17 +76,21 @@ Ranks all **88 IAU constellations** by visibility across your chosen window, cal
 
 **Time frame** — 1 Month, 3 Months, 6 Months, or One Year. Default is *3 Months*.
 
-**Computation precision** — a 5-step slider from *Lowest* to *Highest*, controlling how densely the engine samples each night and month. *Low* is the default and indended for testing, but for accuracy , *Medium* to *Highest* is recommended.
+**Computation precision** — a 5-step slider from *Lowest* to *Highest*, controlling how densely the engine samples each night and month. *Low* is the default and intended for testing, but for accuracy *Medium* to *Highest* is recommended.
 
 #### Results
 
-
+<p align="center">
+  <img src="docs/screenshots/constellation-planner-results.png" alt="Constellation Planner — results view" width="860" />
+</p>
 
 At the top, **hero cards** surface your best target — and a second card for the best target with a defined rising window when the top result stays fixed in the sky all night.
 
 Below, a **heatmap table** shows every constellation with one cell per month, colored by score. Sort by any column; switch between *Heatmap*, *Numbers*, and *Sparkline* views.
 
-
+<p align="center">
+  <img src="docs/screenshots/constellation-planner-heatmap.png" alt="Constellation Planner — heatmap table" width="860" />
+</p>
 
 ---
 
@@ -105,7 +106,9 @@ Runs the same calculations against the **PGC large-galaxy catalogue** — thousa
 
 #### Results
 
-
+<p align="center">
+  <img src="docs/screenshots/galaxy-planner-results.png" alt="Galaxy Planner — results table" width="860" />
+</p>
 
 A **paginated heatmap table** (100 rows per page) with per-month scores, best month, total, and full catalogue metadata. Click any row to open a detail popup. Results for each combination of settings are cached for the session — switching between them is instant.
 
@@ -115,7 +118,7 @@ A **paginated heatmap table** (100 rows per page) with per-month scores, best mo
 
 The score is a unitless measure of **usable night time and sky position** for a target across the sampled timestamps. Higher is better. Zero means you need to switch hemispheres. Compare scores within the same run — absolute numbers vary by precision setting.
 
-The **Best Month** column shows when a constellation or galaxy peaks; **Total** is the cumulative score across the window. 
+The **Best Month** column shows when a constellation or galaxy peaks; **Total** is the cumulative score across the window.
 
 > Treat the score as a **hint, not a verdict**. It tells you what's visible and what's closest to zenith — not what's worth shooting. Object size, brightness, and light pollution are yours to weigh.
 
@@ -129,7 +132,7 @@ Every calculation needs your **latitude and longitude**. Open **Settings** from 
 
 ## Appearance
 
-**Ember** as the default color palette. Easier on your eyes and won't mess with your telescope. **Dark and light mode** — toggle from the top-right sun/moon icon or from Settings. The whole UI flips instantly.
+**Ember** is the default color palette — easier on your eyes and won't mess with your night vision. **Dark and light mode** — toggle from the top-right sun/moon icon or from Settings. The whole UI flips instantly.
 
 **Palettes** — seven hand-tuned color palettes, each in dark and light: Aurora, Nebula, Mars, Ember, Verdant, Monochrome, and Solar. Preview them in the Settings grid; your choice is remembered across restarts.
 
@@ -139,15 +142,14 @@ Every calculation needs your **latitude and longitude**. Open **Settings** from 
 
 Pre-built binaries for macOS are available on the **[Releases](https://github.com/astroradu/RedShift/releases)** page.
 
-
 | Platform | Format |
-| -------- | ------ |
-| macOS    | `.dmg` |
-
+|----------|--------|
+| macOS | `.dmg` |
 
 ---
 
-
+<div align="center">
 
 *RedShift — source available. See [LICENSE](LICENSE) for terms.*
 
+</div>
