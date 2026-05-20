@@ -6,6 +6,7 @@
   --bg: #080B12;
   --surface: #0F1520;
   --surface-2: #131A28;
+  --sky-bg: #364056;
   --accent: #4DBBFF;
   --accent-2: #B06AFF;
   --text: #E8EEFF;
@@ -18,6 +19,13 @@
   --noise-opacity: 0.035;
   --star-opacity: 0.55;
   --grid-line: rgba(232, 238, 255, 0.04);
+  /* Sky 2 selection crosshair — palette-independent. Light-blue on dark
+     backgrounds, dark-blue on light backgrounds (overridden below). */
+  --sky2-selection: #7CC4FF;
+}
+
+:root[data-mode="light"] {
+  --sky2-selection: #0E3A6E;
 }
 
 * { box-sizing: border-box; }

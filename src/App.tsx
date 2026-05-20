@@ -35,11 +35,12 @@ export function App() {
     }
   }, [settings]);
 
-  useEffect(() => {
-    if (palettes.length > 0) {
-      applyPalette(palette, mode);
-    }
-  }, [palette, mode, palettes.length]);
+  // Synchronous during render so CSS vars are set before child effects read them.
+  // applyPalette is idempotent (replaces <style id="palette-vars"> in place),
+  // so repeated calls with the same args are safe.
+  if (palettes.length > 0) {
+    applyPalette(palette, mode);
+  }
 
   useEffect(() => {
     if (backend.status !== 'ready' || !locationLoaded || startupAttemptedRef.current) return;
@@ -104,7 +105,7 @@ export function App() {
         ) : view === 'settings' ? (
           <Settings mode={mode} setMode={setMode} palette={palette} setPalette={setPalette} onClose={closeSettings}/>
         ) : feature ? (
-          <Detail feature={feature}/>
+          <Detail feature={feature} mode={mode} palette={palette}/>
         ) : null}
       </div>
     </>

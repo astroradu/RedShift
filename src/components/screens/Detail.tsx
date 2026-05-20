@@ -2,18 +2,21 @@ import { useState, useEffect } from 'react';
 import { Sidebar } from '../layout/Sidebar';
 import { ConstellationPlanner } from '../features/planner/ConstellationPlanner';
 import { GalaxyPlanner } from '../features/planner/GalaxyPlanner';
+import { SkyViewer2 } from '../features/sky2/SkyViewer2';
 import { Documentation } from '../features/docs/Documentation';
 import { ToolPlaceholder } from '../features/ToolPlaceholder';
 import { useApiQuery } from '../../hooks/useApiQuery';
-import type { Feature, Tool } from '../../types';
+import type { Feature, Mode, Tool } from '../../types';
 
 interface ToolsResponse { tools: Tool[]; default_tool_id: string }
 
 interface DetailProps {
   feature: Feature;
+  mode: Mode;
+  palette: string;
 }
 
-export function Detail({ feature }: DetailProps) {
+export function Detail({ feature, mode, palette }: DetailProps) {
   const { data } = useApiQuery<ToolsResponse>(`/api/tools/${encodeURIComponent(feature.id)}`, [feature.id]);
   const tools = data?.tools ?? [];
   const defaultToolId = data?.default_tool_id ?? 'select';
@@ -28,17 +31,24 @@ export function Detail({ feature }: DetailProps) {
   }
 
   const activeTool = tools.find(t => t.id === tool) ?? tools[0];
+  const openDocs = () => setTool('__docs');
+  const backToDefault = () => setTool(defaultToolId);
 
   return (
     <div className="detail fade-enter fade-in">
-      <Sidebar active={tool} setActive={setTool} tools={tools}/>
+      {feature.toolbar && <Sidebar active={tool} setActive={setTool} tools={tools}/>}
       <main className="main">
         {tool === '__docs' ? (
-          <Documentation feature={feature}/>
+          <Documentation
+            feature={feature}
+            onBack={feature.toolbar ? undefined : backToDefault}
+          />
         ) : feature.id === 'planner' && tool === 'constellation' ? (
           <ConstellationPlanner feature={feature}/>
         ) : feature.id === 'planner' && tool === 'galaxy' ? (
           <GalaxyPlanner feature={feature}/>
+        ) : feature.id === 'sky' ? (
+          <SkyViewer2 mode={mode} palette={palette} onOpenDocs={openDocs}/>
         ) : (
           <ToolPlaceholder tool={activeTool}/>
         )}

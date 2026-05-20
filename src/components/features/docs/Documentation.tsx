@@ -17,8 +17,13 @@ interface DocArticle {
   content: string;
 }
 
+// Maps a Feature.id (see python/src/redshift_backend/data/features.py) to the
+// docs article surfaced as the "suggested" card when the user enters Docs from
+// that feature. Articles are auto-discovered from /docs/*.md via the Vite glob
+// below — this map only chooses which one is highlighted on entry.
 const FEATURE_TO_ARTICLE: Record<string, string> = {
   planner: 'constellation-planner',
+  sky:     'sky-viewer',
 };
 
 const CATEGORIES = STRINGS.DOCS.CATEGORIES;
@@ -240,9 +245,10 @@ function tocSlug(s: string): string {
 interface DocsHomeProps {
   feature: Feature;
   onOpen: (a: DocArticle) => void;
+  onBack?: () => void;
 }
 
-function DocsHome({ feature, onOpen }: DocsHomeProps) {
+function DocsHome({ feature, onOpen, onBack }: DocsHomeProps) {
   const [category, setCategory] = useState('All');
   const [query, setQuery]       = useState('');
 
@@ -262,7 +268,7 @@ function DocsHome({ feature, onOpen }: DocsHomeProps) {
 
   return (
     <div className="docs-screen fade-enter fade-in">
-      <PanelHeader title={STRINGS.DOCS.TITLE} subtitle={STRINGS.DOCS.SUBTITLE} />
+      <PanelHeader title={STRINGS.DOCS.TITLE} subtitle={STRINGS.DOCS.SUBTITLE} onBack={onBack} />
 
       <div className="docs-body">
         <div className="docs-controls">
@@ -422,12 +428,13 @@ function ArticleView({ article, onBack }: ArticleViewProps) {
 
 interface DocumentationProps {
   feature: Feature;
+  onBack?: () => void;
 }
 
-export function Documentation({ feature }: DocumentationProps) {
+export function Documentation({ feature, onBack }: DocumentationProps) {
   const [article, setArticle] = useState<DocArticle | null>(null);
 
   return article
     ? <ArticleView article={article} onBack={() => setArticle(null)}/>
-    : <DocsHome feature={feature} onOpen={setArticle}/>;
+    : <DocsHome feature={feature} onOpen={setArticle} onBack={onBack}/>;
 }

@@ -48,6 +48,24 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
   return (await response.json()) as T;
 }
 
+/**
+ * Like apiFetch, but returns an ArrayBuffer. Use for the Sky Viewer star
+ * catalogue endpoint which serves a packed float32 binary blob.
+ */
+export async function fetchBinary(path: string, init?: RequestInit): Promise<ArrayBuffer> {
+  const { url, token } = await getBackend();
+  const headers = new Headers(init?.headers);
+  headers.set('Authorization', `Bearer ${token}`);
+  headers.set('Accept', 'application/octet-stream');
+
+  const response = await fetch(`${url}${path}`, { ...init, headers });
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new ApiError(response.status, text || response.statusText, path);
+  }
+  return await response.arrayBuffer();
+}
+
 export class ApiError extends Error {
   constructor(public readonly status: number, message: string, public readonly path: string) {
     super(`[${status}] ${path}: ${message}`);
