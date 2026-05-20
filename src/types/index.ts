@@ -5,6 +5,7 @@ export interface Feature {
   desc: string;
   meta: string;
   icon: string;
+  toolbar: boolean;
 }
 
 export interface Tool {
@@ -110,4 +111,58 @@ export interface GalaxyPlannerProgressEvent {
 
 export interface GalaxyPlannerDoneEvent {
   result_id: string;
+}
+
+export interface StarCatalogueMeta {
+  count: number;
+  field_count: number;
+  field_names: string[];
+  dtype: 'float32';
+  endianness: 'little';
+}
+
+export interface NotableStar {
+  id: number;
+  name: string;
+  hd: number | null;
+  hr: number | null;
+  gliese: string | null;
+  bayer_flamsteed: string | null;
+  proper_name: string | null;
+  ra_rad: number;
+  dec_rad: number;
+  mag: number;
+  abs_mag: number | null;
+  spectrum: string | null;
+  color_index: number | null;
+  distance_ly: number | null;
+}
+
+export interface Galaxy {
+  id: string;
+  name: string;
+  alt_names: string[];
+  ra_deg: number;
+  dec_deg: number;
+  major_arcmin: number;
+  minor_arcmin: number;
+  angle_deg: number;
+  tint: 'warm' | 'cool';
+  mag: number | null;
+  distance_mly: number | null;
+}
+
+export interface ConstellationStar {
+  id: number;
+  bfID: string;
+  ra_h: number;
+  dec_d: number;
+}
+
+export interface Constellation {
+  name: string;
+  center_ra_h: number;
+  center_dec_d: number;
+  stars: ConstellationStar[];
+  lines: [number, number][];
 }

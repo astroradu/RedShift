@@ -1,3 +1,22 @@
+## v1.1.1 — Borealis Release
+
+### ✨ New
+
+**Sky Viewer**
+
+- Real-time 3D rendering of the night sky over your observing site, powered by a WebGL particle scene drawing every star in the HYG catalogue sized and coloured by magnitude and B–V index.
+- Sun and Moon rendered with soft halos and correct phase terminator for any moment in time.
+- IAU constellation stick figures and thousands of PGC large galaxies drawn as elliptical smudges at their real angular size and orientation.
+- Independent layer toggles for stars, Sun, Moon, constellation lines, galaxies, equatorial grid, horizon ring, ground plane, and cardinal labels.
+- Three projection modes: Stereographic (default, conformal wide-angle), Fisheye (full hemisphere), and Rectilinear (tight fields).
+- Drag to pan, scroll or pinch to zoom, click any star or galaxy to open a detail card with its full catalogue entry and live alt/az for your location and time.
+- Search by star name or galaxy identifier — results update as you type and respect your active layer toggles.
+- 24-hour time scrubber with a sky-darkness gradient track, astronomical night boundary markers, moon rise/set ribbon, and one-tap presets (Tonight 22:00, Astro midnight, Reset to now).
+- Moon chip showing current phase, illumination percentage, and altitude, updated as you scrub.
+- Three catalogue density options (Full, Balanced, Performance) and a Visual/True 1:1 galaxy size toggle.
+
+---
+
 ## v1.0.2 — macOS Gatekeeper fix
 
 Fixes a crash on macOS where the app wouldn't open after install.

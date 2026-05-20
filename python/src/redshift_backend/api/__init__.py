@@ -8,6 +8,7 @@ from redshift_backend.api import (
     palettes,
     planner,
     settings,
+    sky_viewer,
     tools,
 )
 from redshift_backend.core.security import require_token
@@ -23,3 +24,4 @@ protected_router.include_router(planner.router)
 protected_router.include_router(galaxy_planner.router)
 protected_router.include_router(location.router)
 protected_router.include_router(settings.router)
+protected_router.include_router(sky_viewer.router)

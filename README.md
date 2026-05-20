@@ -6,7 +6,7 @@
 
 Plan your astrophotography sessions with precision — score every constellation and thousands of PGC galaxies by visibility, right from your observing site.
 
-[![Version](https://img.shields.io/badge/version-1.0.2-blue?style=flat-square)](https://github.com/astroradu/RedShift/releases)
+[![Version](https://img.shields.io/badge/version-1.1.1-blue?style=flat-square)](https://github.com/astroradu/RedShift/releases)
 [![License](https://img.shields.io/badge/license-Source_Available-orange?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey?style=flat-square)](#download)
 
@@ -75,6 +75,31 @@ You only need to do this once. After that, RedShift launches normally from Appli
 |--------|---------|-------------|
 | **01 - Imaging Planner** | **Constellation Planner** | Plan your shoots by checking which constellations stick around longest and sit highest in the sky. Backed by real `astropy` / `astroplan` computation. |
 | **01 - Imaging Planner** | **Galaxy Planner** | Scout your best shooting spots by finding galaxies that hang around all night and stay near zenith. Backed by real `astropy` / `astroplan` computation. |
+| **02 - Sky Viewer** | **Sky Viewer** | A real-time 3D rendering of the sky over your observing site — HYG catalogue stars, Sun, Moon, IAU constellation lines, and PGC galaxies, all positioned for your exact location and time. Pan, zoom, scrub through time, and click any object to read its catalogue entry. |
+
+---
+
+## Sky Viewer
+
+The Sky Viewer is a real-time 3D rendering of the sky over your observing site. It draws every star in the HYG catalogue, the visible Sun and Moon, the IAU constellation lines, and thousands of PGC galaxies — all positioned for your latitude, longitude, and whatever moment the time scrubber is parked on.
+
+**Layers** — Stars, Sun, Moon, constellation lines, galaxies, equatorial grid, horizon ring, ground plane, and cardinal labels. Each is independently toggleable from the top-right toolbar.
+
+**Navigation** — drag to pan, scroll or pinch to zoom, click any object to select it. A detail card appears with the full catalogue entry (proper name, identifiers, magnitude, distance, RA/Dec, and live alt/az). Double-click recenters on the target.
+
+**Search** — the search pill in the top-right expands to find any star by name or galaxy by ID (Vega, M31, PGC2557). Results respect your current layer toggles.
+
+**Projection modes** — three toggles let you switch between Rectilinear (straight lines, best zoomed in), Fisheye (full hemisphere), and Stereographic (conformal wide-angle, default).
+
+**Time scrubber** — a 24-hour timeline at the bottom of the screen controls the moment the sky is computed for. The track is colored by sky darkness, with markers for astronomical night boundaries, a moon-above-horizon ribbon, and quick presets (Tonight 22:00, Astro midnight, Reset to now). The moon chip on the right shows the current phase, illumination, and altitude.
+
+**Density and galaxy size** — three density options (Full, Balanced, Performance) trade catalogue completeness against rendering smoothness. Galaxy display can be set to Visual size (slightly enlarged for easy scanning) or True 1:1 size (real angular size, useful for imaging frame checks).
+
+> The Sky Viewer is for exploration and orientation, not session scoring. Use the Constellation Planner or Galaxy Planner when you want targets ranked by visibility.
+
+<p align="center">
+  <img src="docs/screenshots/sky-viewer.png" alt="Sky Viewer" width="860" />
+</p>
 
 ---
 

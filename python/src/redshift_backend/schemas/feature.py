@@ -8,3 +8,4 @@ class Feature(BaseModel):
     desc: str
     meta: str
     icon: str
+    toolbar: bool = True

@@ -1,0 +1,1089 @@
+/* Sky Viewer 2 — full-bleed particle field + floating tweaks panel. */
+
+.sky2-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+.sky2-stage {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: none;
+}
+.sky2-stage.dragging { cursor: grabbing; }
+.sky2-stage canvas { display: block; }
+
+/* Docs (Info) button — mirrors the Sidebar's tool-btn pixel-for-pixel so the
+   button sits exactly where it lived inside .sidebar-foot before the sky
+   feature went toolbar-less. */
+.sky2-docs-btn {
+  position: absolute;
+  left: 10px;
+  bottom: 18px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 200ms ease, background 200ms ease;
+  z-index: 5;
+}
+.sky2-docs-btn::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 0;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: height 220ms cubic-bezier(.4, .0, .2, 1);
+  box-shadow: 0 0 8px var(--accent);
+}
+.sky2-docs-btn:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+.sky2-docs-btn:hover::before {
+  height: 22px;
+}
+
+/* Zoom rail — ported verbatim from temp/styles.css (.sky-zoom / .sk-zoom-*). */
+.sky2-zoom {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex; flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+}
+.sky2-zoom-btn {
+  appearance: none; cursor: pointer; border: 0;
+  width: 28px; height: 28px;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 6px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 180ms ease;
+  padding: 0;
+}
+.sky2-zoom-btn:hover { color: var(--text); background: var(--surface-2); }
+.sky2-zoom-readout {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  padding: 2px 0;
+}
+.sky2-zoom-divider { height: 1px; background: var(--hairline); margin: 2px 4px; }
+
+.sky2-cardinals {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.sky2-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-9999px, -9999px);
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(235, 240, 255, 0.55);
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+  margin-left: -10px;
+  margin-top: -8px;
+}
+.sky2-card.major {
+  font-size: 14px;
+  color: rgba(235, 240, 255, 0.85);
+  letter-spacing: 0.06em;
+  margin-left: -12px;
+  margin-top: -10px;
+}
+
+.sky2-grid-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Below all chrome (.sky2-plate / .sky2-zoom at 2, .sky2-hud at 4) and
+     below the other sky overlays (constellations 4, cardinals 5). Degree
+     numbers are the least important overlay — never paint over UI. */
+  z-index: 1;
+}
+.sky2-gl {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-9999px, -9999px);
+  display: inline-block;
+  font-size: 10px;
+  color: rgba(235, 240, 255, 0.5);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+  font-feature-settings: 'tnum';
+}
+.sky2-gl-dec-left  { margin-left: 0;     margin-top: -6px; }
+.sky2-gl-dec-right { margin-left: -22px; margin-top: -6px; }
+.sky2-gl-ra-bottom { margin-left: -10px; margin-top: -14px; }
+
+.sky2-gl-fine {
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+.sky2-grid-labels[data-fine-on="1"] .sky2-gl-fine {
+  opacity: 1;
+}
+
+/* Top-right visibility plate — ported verbatim from temp/styles.css
+   (.sky-plate.top-right + .sk-tog-row + .sk-tog* + .sk-tog-sep). */
+.sky2-plate {
+  position: absolute;
+  z-index: 2;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+.sky2-plate.top-right { top: 16px; right: 16px; padding: 6px; }
+.sky2-plate.top-left  { top: 16px; left:  16px; max-width: 360px; }
+
+/* Top-left selection card — ported verbatim from temp/styles.css
+   (.sky-plate.top-left + .sk-eyebrow + .sk-title + .sk-meta). */
+.sky2-eyebrow {
+  font-family: 'DM Sans', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sky2-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 2px;
+  letter-spacing: -0.005em;
+}
+.sky2-meta {
+  display: flex; gap: 12px;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  flex-wrap: wrap;
+}
+.sky2-meta b {
+  color: var(--text); font-weight: 500;
+  margin-right: 4px; letter-spacing: 0.08em;
+}
+
+.sky2-tog-row { display: flex; gap: 4px; align-items: center; }
+.sky2-tog {
+  appearance: none; cursor: pointer; border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: all 180ms ease;
+}
+.sky2-tog:hover { color: var(--text); }
+.sky2-tog.on {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.sky2-tog-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--hairline-strong);
+  transition: background 180ms ease, box-shadow 180ms ease;
+}
+.sky2-tog.on .sky2-tog-dot {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+.sky2-tog-sep {
+  width: 1px;
+  align-self: stretch;
+  background: var(--hairline);
+  margin: 2px 2px;
+}
+
+/* Icon-only square pill — ported from temp/styles.css §2789–2863. */
+.sky2-tog.sky2-tog-ic {
+  position: relative;
+  padding: 0;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--muted) 80%, var(--text) 20%);
+  border: 1px solid transparent;
+  border-radius: 7px;
+}
+.sky2-tog.sky2-tog-ic:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+}
+.sky2-tog.sky2-tog-ic.on {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent),
+    0 0 10px -2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* Hover hint popover below an icon pill. */
+.sky2-tog-hint {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%, -4px);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 140ms ease, transform 140ms ease;
+  padding: 5px 9px;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  text-transform: none;
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface) 85%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--hairline-strong) 100%, transparent);
+  border-radius: 6px;
+  box-shadow:
+    0 8px 22px -6px rgba(0,0,0,0.65),
+    0 0 0 1px color-mix(in srgb, var(--bg) 35%, transparent) inset;
+  z-index: 5;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.sky2-tog-hint::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 6px; height: 6px;
+  background: inherit;
+  border-left: 1px solid var(--hairline-strong);
+  border-top:  1px solid var(--hairline-strong);
+  transform: translateX(-50%) rotate(45deg);
+}
+.sky2-tog.sky2-tog-ic:hover .sky2-tog-hint,
+.sky2-tog.sky2-tog-ic:focus-visible .sky2-tog-hint {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  transition-delay: 80ms;
+}
+
+/* Sky button — sun glyph + warmer "on" pill. Hidden in the live bar via
+   .sky2-tog-sky { display: none; } below; rules kept for the day we re-enable. */
+.sky2-tog-sun {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFF1C8 0%, #FFC077 55%, #E07A3A 100%);
+  box-shadow: 0 0 0 1px color-mix(in srgb, #FFB066 30%, transparent);
+  transition: box-shadow 180ms ease, transform 180ms ease, filter 180ms ease;
+  filter: saturate(.4) brightness(.85);
+}
+.sky2-tog-sky.on {
+  color: var(--text);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, #FFC077 14%, transparent),
+    color-mix(in srgb, #E07A3A 8%, transparent));
+}
+.sky2-tog-sky.on .sky2-tog-sun {
+  filter: none;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #FFB066 60%, transparent),
+    0 0 10px color-mix(in srgb, #FFB066 70%, transparent);
+}
+.sky2-tog-sky { display: none; }
+
+/* Bottom HUD timeline — ported verbatim from temp/styles.css
+   (.sky-hud + .sh-time* + .sh-scrubber + .sh-track + .sh-anchor + .sh-tick
+   + .sh-handle + .sh-handle-glyph + .sh-controls + .sh-icon-btn + .sh-now). */
+.sky2-hud {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  padding: 4px 14px 4px 4px;
+  min-height: 48px;
+  width: min(1024px, calc(100% - 32px));
+  user-select: none;
+  -webkit-user-select: none;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hairline-strong) 85%, transparent);
+  border-radius: 999px;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  box-shadow:
+    0 18px 40px -22px rgba(0,0,0,0.55),
+    0 0 0 1px color-mix(in srgb, var(--bg) 40%, transparent) inset;
+  opacity: 0.45;
+  transition: opacity 240ms ease;
+}
+.sky2-hud:hover,
+.sky2-hud:focus-within { opacity: 1; }
+
+.sky2-sh-time {
+  appearance: none;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 4px 14px 4px 8px;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  font-family: inherit;
+  flex-shrink: 0;
+  width: 130px;
+  transition: background 180ms ease;
+}
+.sky2-sh-time:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
+.sky2-sh-time-icon {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  color: var(--muted);
+}
+.sky2-sh-time:hover .sky2-sh-time-icon { color: var(--text); }
+.sky2-sh-time-text {
+  display: flex; flex-direction: column;
+  align-items: flex-start; gap: 1px;
+}
+.sky2-sh-time-date {
+  font-family: 'DM Sans', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1;
+}
+.sky2-sh-time-clock {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.sky2-sh-scrubber {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 140px;
+  padding: 0 6px;
+}
+.sky2-sh-track {
+  position: relative;
+  width: 100%;
+  height: 7px;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--surface) 80%, transparent);
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--hairline-strong) 60%, transparent),
+    inset 0 1px 2px rgba(0,0,0,0.18);
+  cursor: ew-resize;
+  touch-action: none;
+}
+.sky2-sh-tick {
+  position: absolute;
+  top: 50%;
+  width: 1px; height: 4px;
+  background: color-mix(in srgb, var(--text) 22%, transparent);
+  transform: translate(-0.5px, -50%);
+  pointer-events: none;
+}
+.sky2-sh-anchor {
+  position: absolute;
+  top: -2px; bottom: -2px;
+  width: 2px;
+  background: color-mix(in srgb, var(--text) 40%, transparent);
+  transform: translateX(-1px);
+  border-radius: 1px;
+  pointer-events: none;
+}
+.sky2-sh-handle {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--bg) 90%, transparent),
+    0 0 12px color-mix(in srgb, var(--accent) 55%, transparent);
+  pointer-events: none;
+  transition: box-shadow 200ms ease;
+}
+.sky2-sh-handle-glyph {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  line-height: 0;
+  transform: scale(0.82);
+}
+.sky2-sh-handle-glyph.day { color: #FFC077; }
+.sky2-sh-handle-glyph.night { color: #C9D4F0; }
+
+.sky2-sh-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.sky2-sh-icon-btn,
+.sky2-sh-now {
+  appearance: none;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 5px 9px;
+  border-radius: 999px;
+  transition: all 180ms ease;
+  font-variant-numeric: tabular-nums;
+}
+.sky2-sh-icon-btn:hover { color: var(--text); background: color-mix(in srgb, var(--text) 6%, transparent); }
+.sky2-sh-now {
+  color: var(--text);
+  border: 1px solid color-mix(in srgb, var(--hairline-strong) 80%, transparent);
+  padding: 5px 12px;
+  font-weight: 600;
+}
+.sky2-sh-now:hover { border-color: var(--accent); color: var(--accent); }
+.sky2-sh-now.active {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  color: var(--accent);
+}
+
+.sky2-const-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.sky2-const-label {
+  position: absolute;
+  left: 0; top: 0;
+  transform: translate(-9999px, -9999px);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+  margin-left: -16px;
+  margin-top: -7px;
+}
+
+/* Spinning crosshair around the currently selected star or galaxy. Colour
+   comes from --sky2-selection in base.css — palette-independent, theme-keyed. */
+.sky2-selection {
+  position: absolute;
+  left: 0; top: 0;
+  width: 67px;
+  height: 67px;
+  margin-left: -33.5px;
+  margin-top: -33.5px;
+  transform: translate(-9999px, -9999px);
+  pointer-events: none;
+  z-index: 6;
+  color: var(--sky2-selection);
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.sky2-selection-spin {
+  width: 100%;
+  height: 100%;
+  display: block;
+  animation: sky2-selection-spin 24s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes sky2-selection-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── Moon visibility ribbon (above the day/night gradient) ─────────── */
+.sky2-sh-track { overflow: visible; }
+
+.sky2-sh-moon-ribbon {
+  position: absolute;
+  left: 0;
+  bottom: 50%;
+  width: 100%;
+  height: 24px;
+  margin-bottom: -1px;
+  pointer-events: none;
+  overflow: visible;
+  filter: drop-shadow(0 0 4px rgba(220,228,245,0.18));
+}
+.sky2-sh-moon-event {
+  position: absolute;
+  top: 50%;
+  /* Ribbon baseline sits 1px below the track centre (margin-bottom: -1px on
+     .sky2-sh-moon-ribbon) — match that here so the crescent sits exactly
+     where the moon curve hits the horizon, not 1px above it. */
+  transform: translate(-50%, calc(-50% + 1px));
+  width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 0 2px rgba(220,228,245,0.45));
+  pointer-events: auto;
+  z-index: 2;
+}
+.sky2-sh-moon-event::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 1px; height: 4px;
+  background: rgba(220,228,245,0.45);
+  transform: translateX(-0.5px);
+}
+.sky2-sh-moon-event.set::after { bottom: auto; top: 100%; }
+
+/* ─── Inline moon phase chip (right side of HUD) ────────────────────── */
+.sky2-sh-moon-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 120px;   /* fixed width so phase-name length changes can't reshape the HUD */
+  padding: 0 4px 0 8px;
+  margin-left: 2px;
+  border-left: 1px solid color-mix(in srgb, var(--hairline-strong) 55%, transparent);
+}
+.sky2-sh-moon-disc {
+  width: 22px; height: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 0 4px rgba(220,228,245,0.22));
+  flex-shrink: 0;
+}
+.sky2-sh-moon-disc svg { display: block; }
+.sky2-sh-moon-text {
+  display: flex; flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.sky2-sh-moon-name {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  line-height: 1.05;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.sky2-sh-moon-meta {
+  font-family: 'DM Sans', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 4px;
+  text-transform: uppercase;
+}
+.sky2-sh-moon-sep { opacity: 0.5; }
+
+@media (max-width: 720px) {
+  .sky2-sh-moon-name { display: none; }
+}
+
+/* ─── Top-right wrapper: search pill + visibility plate side-by-side ── */
+.sky2-topbar-right {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  z-index: 2;
+}
+.sky2-topbar-right .sky2-plate.top-right {
+  position: static;
+  top: auto;
+  right: auto;
+}
+
+/* ─── Search pill (collapsed + expanded) ───────────────────────────── */
+/* Matches .sky2-plate.top-right: padding 6px, border-radius 10px, 26×26
+   inner buttons, so the closed pill aligns vertically with the visibility
+   plate to its right. */
+.sky2-search {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: padding 220ms cubic-bezier(.2,.7,.2,1);
+}
+.sky2-ss-expand {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 0;
+  opacity: 0;
+  transition:
+    width 240ms cubic-bezier(.2,.7,.2,1),
+    opacity 180ms ease,
+    margin-right 240ms cubic-bezier(.2,.7,.2,1);
+  margin-right: 0;
+}
+.sky2-search.open .sky2-ss-expand {
+  width: 240px;
+  opacity: 1;
+  margin-right: 4px;
+}
+.sky2-ss-clear {
+  flex: 0 0 auto;
+  width: 26px; height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+.sky2-ss-clear:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+.sky2-ss-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 26px;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  padding: 0 6px 0 4px;
+}
+.sky2-ss-input::placeholder { color: var(--muted); }
+
+/* Search trigger — same 26×26 + 7px radius as the other layer pills, just
+   without an extra border (the wrapping pill carries the visual frame). */
+.sky2-search .sky2-tog.sky2-tog-ic.sky2-ss-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.sky2-search.open .sky2-tog.sky2-tog-ic.sky2-ss-btn {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+.sky2-search .sky2-tog.sky2-tog-ic.sky2-ss-btn:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.sky2-ss-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 260px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  background: color-mix(in srgb, var(--surface) 92%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--hairline-strong) 100%, transparent);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow:
+    0 16px 36px -10px rgba(0,0,0,0.7),
+    0 0 0 1px color-mix(in srgb, var(--bg) 35%, transparent) inset;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: sky2-ss-pop 160ms cubic-bezier(.2,.7,.2,1);
+  z-index: 3;
+}
+@keyframes sky2-ss-pop {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sky2-ss-results-head {
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 6px 8px 4px;
+}
+.sky2-ss-result {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text);
+  transition: background 120ms ease;
+}
+.sky2-ss-result:hover {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+.sky2-ss-kind {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+}
+.sky2-ss-kind.galaxy { color: color-mix(in srgb, var(--accent-2) 80%, var(--text)); }
+.sky2-ss-kind.star   { color: #BFD8FF; }
+.sky2-ss-text { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.sky2-ss-name { font-size: 12px; font-weight: 500; }
+.sky2-ss-sub  { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.02em; }
+.sky2-ss-empty {
+  padding: 12px 10px;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ─── Date/time picker popup (.date-picker + .dp-*) ─────────────── */
+.dp-scrim {
+  position: fixed; inset: 0;
+  z-index: 90;
+  background: transparent;
+}
+
+.date-picker {
+  position: fixed;
+  top: 70px;
+  right: 18px;
+  width: 360px;
+  max-width: calc(100vw - 36px);
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 16px;
+  display: flex; flex-direction: column;
+  transform: translateY(-8px) scale(0.98);
+  transform-origin: top right;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 240ms cubic-bezier(.32,.72,.0,1), opacity 200ms ease;
+  z-index: 100;
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--text) 4%, transparent) inset,
+    0 32px 64px -24px color-mix(in srgb, var(--accent) 22%, rgba(0,0,0,0.35)),
+    0 12px 32px -16px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+.date-picker.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dp-head {
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid var(--hairline);
+  position: relative;
+  background: var(--surface);
+}
+.dp-head::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.5;
+}
+.dp-title-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.dp-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+  display: flex; align-items: center; gap: 10px;
+}
+.dp-mark {
+  width: 26px; height: 26px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.dp-x {
+  appearance: none; border: 0; cursor: pointer;
+  width: 26px; height: 26px;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 200ms ease;
+}
+.dp-x:hover { background: var(--surface-2); color: var(--text); }
+.dp-sub {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.dp-body {
+  padding: 18px 20px;
+  display: flex; flex-direction: column;
+  gap: 14px;
+}
+.dp-field { display: flex; flex-direction: column; gap: 6px; }
+.dp-label {
+  font-family: 'DM Sans', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex; align-items: baseline; gap: 8px;
+}
+.dp-hint {
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-size: 10px;
+  color: var(--hairline-strong);
+  font-family: 'DM Sans', sans-serif;
+}
+.dp-input-row {
+  position: relative;
+  display: flex; align-items: center;
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 0 12px;
+  transition: border-color 180ms ease;
+}
+.dp-input-row:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--hairline-strong));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.dp-input-row > svg {
+  color: var(--muted);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.dp-input {
+  appearance: none;
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  padding: 11px 0;
+  letter-spacing: 0.01em;
+  width: 100%;
+}
+.dp-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  cursor: pointer;
+  opacity: 0.7;
+}
+:root[data-mode="light"] .dp-input::-webkit-calendar-picker-indicator { filter: none; }
+.dp-input::-webkit-datetime-edit { color: var(--text); }
+.dp-input::-webkit-datetime-edit-fields-wrapper { color: var(--text); }
+
+.dp-presets { display: flex; flex-direction: column; gap: 6px; }
+.dp-preset-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.dp-preset {
+  appearance: none; cursor: pointer;
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  color: var(--muted);
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  transition: all 160ms ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dp-preset:hover {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--hairline));
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface-2));
+}
+
+.dp-foot {
+  display: flex; gap: 10px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--hairline);
+  background: var(--surface);
+}
+.dp-btn {
+  appearance: none; cursor: pointer;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-2);
+  color: var(--text);
+  flex: 1;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  transition: all 180ms ease;
+}
+.dp-btn.ghost {
+  flex: 0 0 auto;
+  background: transparent;
+  color: var(--muted);
+}
+.dp-btn.ghost:hover { color: var(--text); }
+.dp-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #051018;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent), 0 8px 20px -8px var(--accent);
+}
+:root[data-mode="light"] .dp-btn.primary { color: #fff; }
+.dp-btn.primary:hover { transform: translateY(-1px); }
+
+/* ─── Date-picker custom time stepper ──────── */
+.dp-time-stepper {
+  display: flex; align-items: center; gap: 6px;
+}
+.dp-ts-field {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px;
+}
+.dp-ts-input {
+  width: 36px;
+  text-align: center;
+  font-family: 'Inter Tight', sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 6px;
+  padding: 4px 0;
+  -moz-appearance: textfield;
+}
+.dp-ts-input::-webkit-outer-spin-button,
+.dp-ts-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.dp-ts-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.dp-ts-btn {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 14px;
+  background: transparent;
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  color: var(--muted);
+  transition: color 160ms ease, border-color 160ms ease;
+}
+.dp-ts-btn:hover {
+  color: var(--text);
+  border-color: var(--hairline-strong);
+}
+.dp-ts-sep {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--muted);
+  user-select: none;
+}
